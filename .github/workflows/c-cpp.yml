@@ -1,0 +1,23 @@
+name: OS Workflow
+
+on: [push, pull_request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile all C files
+        run: |
+          for file in $(find . -name "*.c"); do
+            gcc "$file" -o "${file%.c}"
+          done
+
+      - name: Run sample test (if exists)
+        run: |
+          if [ -f "./main" ]; then
+            echo "Running main..."
+            ./main
+          fi
